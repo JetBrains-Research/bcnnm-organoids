@@ -1,7 +1,7 @@
 [![JetBrains Research](https://jb.gg/badges/research.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
 
-# BCNNM: a framework for _in silico_ neural tissue development modeling
+# BCNNM: a framework for _in silico_ neural tissue development
 
 Biological Cellular Neural Network Modeling (BCNNM) framework designed for building dynamic spatial models of neural tissue organization and basic stimulus dynamics. 
 
