@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<BCNNM>
+    <System>
+        <Space dimensions="3" limit="100"/>
+
+        <Pipeline>
+            <Stage id="0" mode="Development" time="50000"/>
+            <Stage id="1" mode="Damage" type="Trauma" ratio="0.2" cellType="MultipotentStemCell" target="Random" customSP="MSCNecrotize"/>
+            <Stage id="2" mode="Development" pharma="SomePharma" time="50000"/>
+            <!--<Stage id="0" mode="Learning" type="Train" dataset="MNIST" size="25000"/>-->
+            <!--<Stage id="1" mode="Learning" type="Test" dataset="MNIST" size="5000"/>-->
+            <!--<Stage id="2" mode="CompareTopology" target="SomeTarget" scoring="SomeScoring"/>-->
+            <!--<Stage id="3" mode="Damage" type="Trauma" ratio="0.2" cellType="Inner" target="Random"/>-->
+            <!--<Stage id="4" mode="Damage" type="Trauma" ratio="0.2" cellType="Decision" target="Random"/>-->
+            <!--<Stage id="5" mode="Learning" type="test" dataset="MNIST" size="5000"/>-->
+            <!--<Stage id="6" mode="Genesis" pharma="SomePharma" time="10000000">-->
+            <!--</Action>-->
+            <!--<Stage id="7" mode="Learning" type="test" dataset="MNIST" size="5000"/>-->
+            <!--<Stage id="8" mode="CompareTopology" target="SomeTarget" scoring="SomeScoring"/>-->
+        </Pipeline>
+
+        <Training lqWindowSize="1000" clusteringSeedCount="10">
+            <Datasets>
+                <Dataset id="0" setType="Train" classCount="2" setFileName="triangle_square_test_100k.csv" setSize="10000"/>
+            </Datasets>
+        </Training>
+    </System>
+
+    <Mechanisms>
+        <Mechanism type="Move">
+            <SignalingPathway type="PSCMove" duration="10" initial="false">
+                <Condition>
+                    <Predicate>
+                        <Operator type="and">
+                            <Rule ligand="PSCMoveFactor" action="gt" value="0.2"/>
+                            <Operator type="or">
+                                <Rule ligand="MSCMoveFactor" action="gt" value="0.15"/>
+                                <Rule ligand="MSCMoveFactor" action="lt~" value="0.85"/>
+                            </Operator>
+                        </Operator>
+                    </Predicate>
+                    <ConditionParameter selectionLigand="PSCMoveFactor" selectionType="Gradient"/>
+                </Condition>
+            </SignalingPathway>
+
+            <!-- (PSCMoveFactor > 0.5 || (MSCMoveFactor < 0.7 && MSCMoveFactor >= 0.2)) && ( ((Ligand3 > 0.2 && Ligand4 < 0.5) || (Ligand5 > 0.7 || Ligand6 < 0.2)) && Ligand7 >= 0.3 ) -->
+            <SignalingPathway type="ComplexSP" duration="10" initial="false">
+                <Condition>
+                    <Predicate>
+                        <Operator type="and">
+                            <Operator type="or">
+                                <Rule ligand="PSCMoveFactor" action="gt" value="0.5"/>
+                                <Operator type="and">
+                                    <Rule ligand="MSCMoveFactor" action="lt" value="0.7"/>
+                                    <Rule ligand="MSCMoveFactor" action="gt~" value="0.2"/>
+                                </Operator>
+                            </Operator>
+                            <Operator type="and">
+                                <Rule ligand="Ligand7" action="gt~" value="0.3"/>
+                                <Operator type="or">
+                                    <Operator type="and">
+                                        <Rule ligand="Ligand3" action="gt" value="0.2"/>
+                                        <Rule ligand="Ligand4" action="lt" value="0.5"/>
+                                    </Operator>
+                                    <Operator type="or">
+                                        <Rule ligand="Ligand5" action="gt" value="0.7"/>
+                                        <Rule ligand="Ligand6" action="lt" value="0.2"/>
+                                    </Operator>
+                                </Operator>
+                            </Operator>
+                        </Operator>
+                    </Predicate>
+                    <ConditionParameter selectionLigand="PSCMoveFactor" selectionType="Gradient"/>
+                </Condition>
+            </SignalingPathway>
+        </Mechanism>
+
+    </Mechanisms>
+
+    <ReceptorsDescription>
+    </ReceptorsDescription>
+
+    <Ligands>
+        <Ligand num="0" type="PSCMoveFactor" radius="15"/>
+        <Ligand num="1" type="MSCMoveFactor" radius="15"/>
+        <Ligand num="2" type="Ligand2" radius="15"/>
+        <Ligand num="3" type="Ligand3" radius="15"/>
+        <Ligand num="4" type="Ligand4" radius="15"/>
+        <Ligand num="5" type="Ligand5" radius="15"/>
+        <Ligand num="6" type="Ligand6" radius="15"/>
+        <Ligand num="7" type="Ligand7" radius="15"/>
+
+    </Ligands>
+
+    <Cells>
+        <Cell baseType="StemCell" type="PluripotentStemCell"> <!-- type="cell1" movable="true">-->
+            <SPs>
+                <!--<SP type="PSCDivide"/>-->
+                <!--<SP type="PSCCellCycleStop"/>
+                <SP type="PSCToMSCDivideAndDifferentiate"/>-->
+                <!--<SP type="PSCToMSCDifferentiate"/>-->
+                <!--<SP type="PSCToNADifferentiate"/>-->
+                <!--<SP type="PSCDopamineSpread"/>-->
+                <!--<SP type="PSCSerotoninGather"/>-->
+                <SP type="PSCMove"/>
+            </SPs>
+
+            <Compartments>
+                <!--<Compartment type="Soma">-->
+                <!--<Receptors>-->
+                <!--<Receptor type="" sp=""/>-->
+                <!--</Receptors>-->
+                <!--<SPs>-->
+                <!--&lt;!&ndash;"daemon" pathways&ndash;&gt;-->
+                <!--<SP type="sp1"/>-->
+                <!--</SPs>-->
+                <!--</Compartment>-->
+                <!--<Compartment type="Axon">-->
+                <!--<Receptors>-->
+                <!--<Receptor type="" sp=""/>-->
+                <!--</Receptors>-->
+                <!--</Compartment>-->
+                <!--<Compartment type="Dendrite">-->
+                <!--<Receptors>-->
+                <!--<Receptor type="" sp=""/>-->
+                <!--</Receptors>-->
+                <!--</Compartment>-->
+            </Compartments>
+        </Cell>
+
+        <!--<Cell baseType="StemCell" type="MultipotentStemCell"> &lt;!&ndash; type="cell1" movable="true">&ndash;&gt;
+            <SPs>
+                &lt;!&ndash;<SP type="MSCMove"/>
+                <SP type="MSCNecrotize"/>
+                <SP type="MSCProbabilisticDeath"/>&ndash;&gt;
+                &lt;!&ndash;<SP type="PSCDivide"/>&ndash;&gt;
+                &lt;!&ndash;<SP type="PSCToMSCDifferentiate"/>&ndash;&gt;
+                &lt;!&ndash;<SP type="PSCToNADifferentiate"/>&ndash;&gt;
+                &lt;!&ndash;<SP type="PSCDopamineSpread"/>&ndash;&gt;
+                &lt;!&ndash;<SP type="PSCSerotoninGather"/>&ndash;&gt;
+            </SPs>
+
+            <Compartments>
+                &lt;!&ndash;<Compartment type="Soma">&ndash;&gt;
+                &lt;!&ndash;<Receptors>&ndash;&gt;
+                &lt;!&ndash;<Receptor type="" sp=""/>&ndash;&gt;
+                &lt;!&ndash;</Receptors>&ndash;&gt;
+                &lt;!&ndash;<SPs>&ndash;&gt;
+                &lt;!&ndash;&lt;!&ndash;"daemon" pathways&ndash;&gt;&ndash;&gt;
+                &lt;!&ndash;<SP type="sp1"/>&ndash;&gt;
+                &lt;!&ndash;</SPs>&ndash;&gt;
+                &lt;!&ndash;</Compartment>&ndash;&gt;
+                &lt;!&ndash;<Compartment type="Axon">&ndash;&gt;
+                &lt;!&ndash;<Receptors>&ndash;&gt;
+                &lt;!&ndash;<Receptor type="" sp=""/>&ndash;&gt;
+                &lt;!&ndash;</Receptors>&ndash;&gt;
+                &lt;!&ndash;</Compartment>&ndash;&gt;
+                &lt;!&ndash;<Compartment type="Dendrite">&ndash;&gt;
+                &lt;!&ndash;<Receptors>&ndash;&gt;
+                &lt;!&ndash;<Receptor type="" sp=""/>&ndash;&gt;
+                &lt;!&ndash;</Receptors>&ndash;&gt;
+                &lt;!&ndash;</Compartment>&ndash;&gt;
+            </Compartments>
+        </Cell>-->
+    </Cells>
+
+    <SignalPoints>
+        <SignalPoint baseType="SignalPoint" type="PSCMove">
+            <SPs>
+                <SP type="PSCMove"/>
+            </SPs>
+        </SignalPoint>
+    </SignalPoints>
+
+</BCNNM>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018. This file was made as a part of BCNNM@JetBrains_Research work.
+  -->
+
+<!--
+  ~ DO NOT!!!!!! REGENERATE THIS MODEL USING STANDARD GENERATORS. WRITE IT MANUALLY!
+  -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xs:element name="SP">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <!--SPACE-->
+
+
+    <xs:element name="SignalPoint">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="group" type="xs:string"/>
+            <xs:attribute name="type" type="xs:string"/>
+            <xs:attribute name="x" type="xs:int"/>
+            <xs:attribute name="y" type="xs:int"/>
+            <xs:attribute name="z" type="xs:int"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Connection">
+        <xs:complexType>
+            <xs:attribute name="destination" type="xs:nonNegativeInteger"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Cell">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Connections" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Connection" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="num" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="groupName" type="xs:string"/>
+            <xs:attribute name="type" type="xs:string"/>
+            <xs:attribute name="x" type="xs:int"/>
+            <xs:attribute name="y" type="xs:int"/>
+            <xs:attribute name="z" type="xs:int"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Gene">
+        <xs:complexType>
+            <xs:attribute name="duration" type="xs:int"/>
+            <xs:attribute name="name" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Individual">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="SignalPoints">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="SignalPoint" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Cells">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Cell" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="GeneSet">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Gene" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

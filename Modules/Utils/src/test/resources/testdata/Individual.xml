@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Individual type="00000000-0000-0000-0000-000000000000">
+
+    <SignalPoints>
+        <!--<SignalPoint type="PSCMoveFactor" id="0" group="10" x="46" y="46" z="46"/>-->
+    </SignalPoints>
+
+    <Cells>
+        <Cell num="0" groupName="Sensors" type="PluripotentStemCell" x="50" y="50" z="50">
+            <!--<Connections>-->
+                <!--<Connection destination="225"/>-->
+            <!--</Connections>-->
+        </Cell>
+    </Cells>
+
+
+    <GeneSet>
+        <Gene duration="1000" name="Jdjq"/>
+    </GeneSet>
+
+
+</Individual>

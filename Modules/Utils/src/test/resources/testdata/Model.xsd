@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--DO NOT!!!!!! REGENERATE THIS MODEL USING STANDARD GENERATORS. WRITE IT MANUALLY!-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <!--SYSTEM-->
+
+    <xs:element name="Space">
+        <xs:complexType>
+            <xs:attribute name="dimensions" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="limit" type="xs:nonNegativeInteger"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Stage">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:long"/>
+            <xs:attribute name="mode" type="xs:string"/>
+            <xs:attribute name="type" type="xs:string"/>
+            <xs:attribute name="dataset" type="xs:string" use="optional"/>
+            <xs:attribute name="size" type="xs:int" use="optional"/>
+            <xs:attribute name="ratio" type="xs:double" use="optional"/>
+            <xs:attribute name="cellType" type="xs:string" use="optional"/>
+            <xs:attribute name="target" type="xs:string" use="optional"/>
+            <xs:attribute name="pharma" type="xs:string" use="optional"/>
+            <xs:attribute name="time" type="xs:long" use="optional"/>
+            <xs:attribute name="scoring" type="xs:string" use="optional"/>
+            <xs:attribute name="customSP" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Dataset">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="classCount" type="xs:int"/>
+            <xs:attribute name="setType" type="xs:string"/>
+            <xs:attribute name="setFileName" type="xs:string"/>
+            <xs:attribute name="setSize" type="xs:int"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!--MECHANISMS-->
+
+    <xs:element name="Mechanism">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="SignalingPathway" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SignalingPathway">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Condition" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Predicate" minOccurs="0"/>
+                            <xs:element ref="ConditionParameter" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element ref="ExecuteParameter" minOccurs="0" maxOccurs="1"/>
+
+                <xs:element name="ExecuteSignalingPathways" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="ExecuteSignalingPathway" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="DisruptSignalingPathways" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="DisruptSignalingPathway" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string"/>
+            <xs:attribute name="duration" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="initial" type="xs:boolean"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Rule">
+        <xs:complexType>
+            <xs:attribute name="ligand" type="xs:string"/>
+            <xs:attribute name="action" type="xs:string"/>
+            <xs:attribute name="value" type="xs:double"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Operator">
+        <xs:complexType>
+            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="Rule" maxOccurs="unbounded" minOccurs="0"/>
+                <xs:element ref="Operator" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Predicate">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Operator" minOccurs="0"/>
+                <xs:element ref="Rule" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ExecuteParameter">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="creationType" type="xs:string" use="optional"/>
+            <xs:attribute name="ligand" type="xs:string" use="optional"/>
+            <xs:attribute name="probability" type="xs:double" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ConditionParameter">
+        <xs:complexType>
+            <xs:attribute name="selectionLigand" type="xs:string"/>
+            <xs:attribute name="selectionType" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ExecuteSignalingPathway">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="run" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="DisruptSignalingPathway">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="run" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!--CELLS-->
+
+    <xs:element name="SP">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Compartment">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Receptors" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded">
+                            <xs:element ref="Receptor"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="SPs" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded">
+                            <xs:element ref="SP"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Cell">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="SPs" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded">
+                            <xs:element ref="SP" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Compartments">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Compartment" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string"/>
+            <xs:attribute name="baseType" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Receptor">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string"/>
+            <xs:attribute name="sp" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!--LIGANDS-->
+
+    <xs:element name="Ligand">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string"/>
+            <xs:attribute name="radius" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="num" type="xs:nonNegativeInteger"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!--RECEPTORS-->
+
+    <xs:element name="ReceptorDescription">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="ligand" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SignalPoint">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="SPs" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="SP" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="baseType"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="BCNNM">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="System">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Space"/>
+                            <xs:element name="Pipeline">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element ref="Stage" minOccurs="1" maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Training">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Datasets">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element ref="Dataset" minOccurs="0" maxOccurs="unbounded"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="lqWindowSize" type="xs:int"/>
+                                    <xs:attribute name="clusteringSeedCount" type="xs:int"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="Mechanisms">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Mechanism" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="ReceptorsDescription">
+                    <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded" minOccurs="0">
+                            <xs:element ref="ReceptorDescription" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="Ligands">
+                    <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded" minOccurs="0">
+                            <xs:element ref="Ligand" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="Cells">
+                    <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded" minOccurs="1">
+                            <xs:element ref="Cell" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="SignalPoints">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="SignalPoint" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+<!--                <xs:element name="GeneMap">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="SP" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>-->
+
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

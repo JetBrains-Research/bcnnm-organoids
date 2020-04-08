@@ -1,0 +1,1085 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<BCNNM>
+    <System>
+        <Space limit="100"/>
+        <Pipeline>
+            <Stage id="0" mode="Development" time="200000"/>
+        </Pipeline>
+    </System>
+
+    <Mechanisms>
+        <Mechanism type="Divide">
+            <SignalingPathway id="NPCDivide" duration="100" initial="false"/>
+        </Mechanism>
+
+        <Mechanism type="DivideAndDifferentiate">
+            <SignalingPathway id="NSCToNPCDivideAndDifferentiate" duration="1000" initial="true">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="NeuralProgenitorCell"/>
+                <Cascades>
+                    <Cascade pathway="NSCToNPCDivideAndDifferentiate" action="Execute" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+        </Mechanism>
+
+        <Mechanism type="SpreadChemicalSignal">
+            <!--Long-distance stem cell factor emission-->
+            <SignalingPathway id="NSCFSpread" duration="200" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="NSCF"/>
+                <Cascades>
+                    <Cascade pathway="NSCFSpread" action="Execute" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--Neural Progenitor factor emission at the sphere surface and in all its volume-->
+            <SignalingPathway id="NPCFSpread" duration="100" initial="false">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="NPCF"/>
+                <Cascades>
+                    <Cascade pathway="NPCFSpread" action="Execute" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--Neuron presence factor emission to trigger GNF secretion by glial cells-->
+            <SignalingPathway id="NFSpread" duration="100" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="NF"/>
+            </SignalingPathway>
+
+            <!--Glial cells secret GNF, which triggers axon terminal formation-->
+            <SignalingPathway id="GNFSpread" duration="100" initial="false">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="GNF"/>
+            </SignalingPathway>
+            
+
+            <!--AxonGrowthFactor-->
+            <!--Axon Growth Factor is emitted by the dendritic tree over a distance of > 1-->
+            <!--in order to notify axons about the possibility to grow in the direction of the desired layer-->
+
+            <!--L3->L2-->
+            <SignalingPathway id="L2NeuronAGFSpread" duration="2000" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L2NeuronAGF"/>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronAGFSpread" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L1->L3-->
+            <SignalingPathway id="L3NeuronAGFSpread" duration="2000" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L3NeuronAGF"/>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L3NeuronAGFSpread" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronAGFSpread" duration="2000" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L4NeuronAGF"/>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L4NeuronAGFSpread" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+
+            <!--AxonConnectionFactor-->
+            <!--After the dendritic tree formation, AxonConnectionFactor emission is started once.-->
+            <!--In this way, the dendritic tree signalizes about the possibility of connection establishment in a given coordinate-->
+
+            <!--L3->L2-->
+            <SignalingPathway id="L2NeuronCAFSpread" duration="10" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L2NeuronCAF"/>
+            </SignalingPathway>
+
+            <!--L1->L3-->
+            <SignalingPathway id="L3NeuronCAFSpread" duration="10" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L3NeuronCAF"/>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronCAFSpread" duration="10" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L4NeuronCAF"/>
+            </SignalingPathway>
+
+
+            <!--TerminalFormedFactor-->
+            <!--TerminalFormedFactor is secreted by a formed axon terminal to inform a dendrite that dendritic spine must be formed-->
+            <!--Factor is absorbed right after the emission, in order not to leave false remaining signals-->
+
+            <!--L1->L3-->
+            <SignalingPathway id="L1NeuronTCFSpread" duration="10" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L1NeuronTCF"/>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L1NeuronTCFGather" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L3->L2-->
+            <SignalingPathway id="L3NeuronTCFSpread" duration="10" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L3NeuronTCF"/>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L3NeuronTCFGather" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L2NeuronTCFSpread" duration="10" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L2NeuronTCF"/>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronTCFGather" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+
+            <!--DendriticSpineFormedFactor-->
+            <!--DendriticSpineFormedFactor emission signals to the axon terminal located in the same coordinate that it’s time to form a synapse.-->
+            <!--Factor is absorbed right after emission, in order not to leave false remaining signals, which could mislead other axons-->
+
+            <!--L1->L3-->
+            <SignalingPathway id="L3NeuronDSCFSpread" duration="10" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L3NeuronDSCF"/>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L3NeuronDSCFGather" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L3->L2-->
+            <SignalingPathway id="L2NeuronDSCFSpread" duration="10" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L2NeuronDSCF"/>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronDSCFGather" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronDSCFSpread" duration="10" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L4NeuronDSCF"/>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L4NeuronDSCFGather" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+        </Mechanism>
+
+        <Mechanism type="GatherChemicalSignal">
+            <!--NPC Factor will be absorbed by radial glia and basal progenitors (to preserve order)-->
+            <SignalingPathway id="NPCFGather" duration="100" initial="false">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="NPCF"/>
+            </SignalingPathway>
+
+
+            <!--TerminalFormedFactor-->
+            <!--TerminalFormedFactor is secreted by a formed axon terminal to inform a dendrite that dendritic spine must be formed-->
+            <!--Factor is absorbed right after the emission.-->
+            
+            <!--L1->L3-->
+            <SignalingPathway id="L1NeuronTCFGather" duration="20" initial="false">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L1NeuronTCF"/>
+            </SignalingPathway>
+
+            <!--L3->L2-->
+            <SignalingPathway id="L3NeuronTCFGather" duration="20" initial="false">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L3NeuronTCF"/>
+            </SignalingPathway>
+            
+            <!--L2->L4-->
+            <SignalingPathway id="L2NeuronTCFGather" duration="20" initial="false">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L2NeuronTCF"/>
+            </SignalingPathway>
+
+
+            <!--DendriticSpineFormedFactor-->
+            <!--DendriticSpineFormedFactor signals to the axon terminal about connection possibility-->
+            <!--Factor is absorbed right after emission-->
+            
+            <!--L1->L3-->
+            <SignalingPathway id="L3NeuronDSCFGather" duration="20" initial="false">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L3NeuronDSCF"/>
+            </SignalingPathway>
+
+            <!--L3->L2-->
+            <SignalingPathway id="L2NeuronDSCFGather" duration="20" initial="false">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L2NeuronDSCF"/>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronDSCFGather" duration="20" initial="false">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L4NeuronDSCF"/>
+            </SignalingPathway>
+        </Mechanism>
+
+        <Mechanism type="Apoptize">
+            <SignalingPathway id="NPCApoptize" duration="10" initial="false"/>
+        </Mechanism>
+
+        <Mechanism type="CheckSignals">
+
+            <!--outer sphere surface check
+            If true - divide.
+            if false - secrete NPCF (launches further differentiation)-->
+            <SignalingPathway id="NSCFCheckSignals" duration="500" initial="true">
+                <Condition>
+                    <Predicate rule="NSCF _gt 0.05" args="NSCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NPCFSpread" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="NSCFCheckSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="NPCDivide" action="Execute" condition="OnConditionTrue"/>
+                    <Cascade pathway="NSCFCheckSignals" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+
+            <SignalingPathway id="NPCDifferentiateCheckSignals" duration="500" initial="false">
+                <Condition>
+                    <Predicate rule="NPCF _~gt 4.15 AND NSCF _lt 0.90" args="NPCF,NSCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NPCDifferentiateCheckSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="NPCDifferentiateChoice" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="NPCFCheckSignals" duration="200" initial="true">
+                <Condition>
+                    <Predicate rule="NPCF _gt 0.0" args="NPCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NPCFCheckSignals" action="Execute" condition="OnConditionFalse"/> <!--changed from Default-->
+                    <Cascade pathway="NPCFSpread" action="Execute" condition="OnConditionTrue"/>
+                    <Cascade pathway="NPCDifferentiateCheckSignals" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="RGCNPCFCheckSignals" duration="200" initial="true">
+                <Condition>
+                    <Predicate rule="NPCF _~gt 1.0" args="NPCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="RGCNPCFCheckSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="NPCFGather" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="BPCNPCFCheckSignals" duration="200" initial="true">
+                <Condition>
+                    <Predicate rule="NPCF _~gt 1.0" args="NPCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="BPCNPCFCheckSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="NPCFGather" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="NRPToL1NeuronCheckDifferentiationSignals" duration="700" initial="true">
+                <Condition>
+                    <Predicate rule="NSCF _~gt 0.05 AND NSCF _lt 0.22" args="NSCF"
+                               distribution="Gaussian" distributionVariable="NSCF" distributionParameters="0.25,0.15"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NRPToL1NeuronCheckDifferentiationSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="NRPToL1NeuronDifferentiate" action="Execute" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL1NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL2NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL3NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL4NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="NRPToL2NeuronCheckDifferentiationSignals" duration="689" initial="true">
+                <Condition>
+                    <Predicate rule="NSCF _~gt 0.16 AND NSCF _lt 0.41" args="NSCF"
+                               distribution="Gaussian" distributionVariable="NSCF" distributionParameters="0.45,0.25"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NRPToL2NeuronCheckDifferentiationSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="NRPToL2NeuronDifferentiate" action="Execute" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL1NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL2NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL3NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL4NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="NRPToL3NeuronCheckDifferentiationSignals" duration="693" initial="true">
+                <Condition>
+                    <!--NSCF _lt 0.80"-->
+                    <Predicate rule="NSCF _~gt 0.37 AND NSCF _lt 0.60" args="NSCF"
+                               distribution="Gaussian" distributionVariable="NSCF" distributionParameters="0.65,0.48"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NRPToL3NeuronCheckDifferentiationSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="NRPToL3NeuronDifferentiate" action="Execute" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL1NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL2NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL3NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL4NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="NRPToL4NeuronCheckDifferentiationSignals" duration="697" initial="true">
+                <Condition>
+                    <Predicate rule="NSCF _~gt 0.55 AND NSCF _lt 0.75" args="NSCF"
+                               distribution="Gaussian" distributionVariable="NSCF" distributionParameters="0.77,0.65"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NRPToL4NeuronCheckDifferentiationSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="NRPToL4NeuronDifferentiate" action="Execute" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL1NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL2NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                    <Cascade pathway="NRPToL3NeuronCheckDifferentiationSignals" action="Disrupt" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+
+            <!--GNF presence check is a transition from STAGE2 (cell mass formation) to STAGE3 (neuron compartments formation and axon growth)-->
+            <SignalingPathway id="L1NeuronGNFCheckSignals" duration="2000" initial="true">
+                <Condition>
+                    <Predicate rule="GNF _~gt 0.5" args="GNF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NFSpread" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="L1NeuronGNFCheckSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="L1NeuronAxonForm" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="L2NeuronGNFCheckSignals" duration="2000" initial="true">
+                <Condition>
+                    <Predicate rule="GNF _~gt 0.5" args="GNF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NFSpread" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="L2NeuronGNFCheckSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="L2NeuronAxonForm" action="Execute" condition="OnConditionTrue"/>
+                    <Cascade pathway="L2NeuronDendriteTreeForm" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="L3NeuronGNFCheckSignals" duration="2000" initial="true">
+                <Condition>
+                    <Predicate rule="GNF _~gt 0.5" args="GNF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NFSpread" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="L3NeuronGNFCheckSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="L3NeuronAxonForm" action="Execute" condition="OnConditionTrue"/>
+                    <Cascade pathway="L3NeuronDendriteTreeForm" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="L4NeuronGNFCheckSignals" duration="2000" initial="true">
+                <Condition>
+                    <Predicate rule="GNF _~gt 0.5" args="GNF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NFSpread" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="L4NeuronGNFCheckSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="L4NeuronDendriteTreeForm" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="NFCheckSignals" duration="2000" initial="true">
+                <Condition>
+                    <Predicate rule="NF _~gt 0.2 AND GNF _lt 2.5" args="NF,GNF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NFCheckSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="NFCheckSignals" action="Execute" condition="OnConditionTrue"/>
+                    <Cascade pathway="GNFSpread" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+
+            <!--STAGE3: AxonGrowthFactor presence is checked by an axon-->
+            <!--L3->L2-->
+            <SignalingPathway id="L2NeuronAGFCheckSignal" duration="500" initial="true">
+                <Condition>
+                    <Predicate rule="L2NeuronAGF _gt 0.1" args="L2NeuronAGF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronCAFCheckSignal" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L2NeuronAGFCheckSignal" condition="OnConditionFalse"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L1->L3-->
+            <SignalingPathway id="L3NeuronAGFCheckSignal" duration="500" initial="true">
+                <Condition>
+                    <Predicate rule="L3NeuronAGF _gt 0.1" args="L3NeuronAGF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L3NeuronCAFCheckSignal" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L3NeuronAGFCheckSignal" condition="OnConditionFalse"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronAGFCheckSignal" duration="500" initial="true">
+                <Condition>
+                    <Predicate rule="L4NeuronAGF _gt 0.1" args="L4NeuronAGF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L4NeuronCAFCheckSignal" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L4NeuronAGFCheckSignal" condition="OnConditionFalse"/>
+                </Cascades>
+            </SignalingPathway>
+
+
+            <!--STAGE3: AxonConnectionFactor presence check is performed by an axon-->
+            <!--L3->L2-->
+            <SignalingPathway id="L2NeuronCAFCheckSignal" duration="200" initial="false">
+                <Condition>
+                    <Predicate rule="L2NeuronCAF _~gt 1" args="L2NeuronCAF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L3NeuronAxonGrowOn" condition="OnConditionFalse"/>
+                    <Cascade action="Execute" pathway="L3NeuronAxonGrowOff" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L3NeuronAxonalTerminalForm" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L1->L3-->
+            <SignalingPathway id="L3NeuronCAFCheckSignal" duration="200" initial="false">
+                <Condition>
+                    <Predicate rule="L3NeuronCAF _~gt 1" args="L3NeuronCAF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L1NeuronAxonGrowOn" condition="OnConditionFalse"/>
+                    <Cascade action="Execute" pathway="L1NeuronAxonGrowOff" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L1NeuronAxonalTerminalForm" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronCAFCheckSignal" duration="200" initial="false">
+                <Condition>
+                    <Predicate rule="L4NeuronCAF _~gt 1" args="L4NeuronCAF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronAxonGrowOn" condition="OnConditionFalse"/>
+                    <Cascade action="Execute" pathway="L2NeuronAxonGrowOff" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L2NeuronAxonalTerminalForm" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+            
+            <!--STAGE3: TerminalFormedFactor presence is checked by dendritic tree-->
+            <!--L2->L4-->
+            <SignalingPathway id="L2NeuronTCFCheckSignal" duration="20" initial="true">
+                <Condition>
+                    <Predicate rule="L2NeuronTCF _~gt 1" args="L2NeuronTCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronTCFCheckSignal" condition="Default"/>
+                    <Cascade action="Execute" pathway="L4NeuronDendriticSpineForm" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+            
+            <!--L1->L3-->
+            <SignalingPathway id="L1NeuronTCFCheckSignal" duration="20" initial="true">
+                <Condition>
+                    <Predicate rule="L1NeuronTCF _~gt 1" args="L1NeuronTCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L1NeuronTCFCheckSignal" condition="Default"/>
+                    <Cascade action="Execute" pathway="L3NeuronDendriticSpineForm" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L3->L2-->
+            <SignalingPathway id="L3NeuronTCFCheckSignal" duration="20" initial="true">
+                <Condition>
+                    <Predicate rule="L3NeuronTCF _~gt 1" args="L3NeuronTCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L3NeuronTCFCheckSignal" condition="Default"/>
+                    <Cascade action="Execute" pathway="L2NeuronDendriticSpineForm" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+            
+            
+            <!--STAGE3: DendriticSpineFormedFactor presence is checked-->
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronDSCFCheckSignal" duration="20" initial="true">
+                <Condition>
+                    <Predicate rule="L4NeuronDSCF _~gt 1" args="L4NeuronDSCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L4NeuronDSCFCheckSignal" condition="OnConditionFalse"/>
+                    <Cascade action="Execute" pathway="L2NeuronSynapseForm" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L1->L3-->
+            <SignalingPathway id="L3NeuronDSCFCheckSignal" duration="20" initial="true">
+                <Condition>
+                    <Predicate rule="L3NeuronDSCF _~gt 1" args="L3NeuronDSCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L3NeuronDSCFCheckSignal" condition="OnConditionFalse"/>
+                    <Cascade action="Execute" pathway="L1NeuronSynapseForm" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L3->L2-->
+            <SignalingPathway id="L2NeuronDSCFCheckSignal" duration="20" initial="true">
+                <Condition>
+                    <Predicate rule="L2NeuronDSCF _~gt 1" args="L2NeuronDSCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronDSCFCheckSignal" condition="OnConditionFalse"/>
+                    <Cascade action="Execute" pathway="L3NeuronSynapseForm" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+        </Mechanism>
+
+        <!--STAGE3: compartment formation: dendritic tree, dendritic spine, axon, axon terminal-->
+        <Mechanism type="CompartmentForm">
+
+            <!--L1 Neuron: no dendrite-->
+            <SignalingPathway id="L1NeuronAxonForm" duration="50" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L1NeuronAxon"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="L1NeuronAxonalTerminalForm" duration="20" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L1NeuronAxonalTerminal"/>
+            </SignalingPathway>
+            
+
+            <!--L2 Neuron: normal-->
+            <SignalingPathway id="L2NeuronAxonForm" duration="50" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L2NeuronAxon"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="L2NeuronAxonalTerminalForm" duration="20" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L2NeuronAxonalTerminal"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="L2NeuronDendriteTreeForm" duration="50" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L2NeuronDendriteTree"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="L2NeuronDendriticSpineForm" duration="20" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L2NeuronDendriticSpine"/>
+            </SignalingPathway>
+
+            <!--L3 Neuron: normal-->
+            <SignalingPathway id="L3NeuronAxonForm" duration="50" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L3NeuronAxon"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="L3NeuronAxonalTerminalForm" duration="20" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L3NeuronAxonalTerminal"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="L3NeuronDendriteTreeForm" duration="50" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L3NeuronDendriteTree"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="L3NeuronDendriticSpineForm" duration="20" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L3NeuronDendriticSpine"/>
+            </SignalingPathway>
+
+            <!--L4 Neuron: no axon-->
+            <SignalingPathway id="L4NeuronDendriteTreeForm" duration="50" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L4NeuronDendriteTree"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="L4NeuronDendriticSpineForm" duration="20" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L4NeuronDendriticSpine"/>
+            </SignalingPathway>
+        </Mechanism>
+
+        <!--STAGE3: final synapse formation-->
+        <Mechanism type="SynapseForm">
+            <SignalingPathway id="L1NeuronSynapseForm" duration="500" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L1NeuronSynapse"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="L2NeuronSynapseForm" duration="500" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L2NeuronSynapse"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="L3NeuronSynapseForm" duration="500" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L3NeuronSynapse"/>
+            </SignalingPathway>
+        </Mechanism>
+        
+
+        <!--STAGE3: Axon growth in accordance with the scheme: (L1->L3, L3->L2, L2->L4)-->
+        <Mechanism type="AxonGrow">
+            <!--L1->L3-->
+            <SignalingPathway id="L1NeuronAxonGrowOn" duration="1000" initial="false">
+                <Condition>
+                    <Predicate rule="L3NeuronAGF _gt 0.1" args="L3NeuronAGF"/>
+                    <ConditionParameter selectionLigand="L3NeuronAGF" selectionType="Gradient" />
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L3NeuronCAFCheckSignal" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L3NeuronAGFCheckSignal" condition="OnConditionFalse"/>
+                </Cascades>
+            </SignalingPathway>
+            
+            <!--L1->L3-->
+            <SignalingPathway id="L1NeuronAxonGrowOff" duration="1000" initial="false">
+                <Condition>
+                    <Predicate rule="L3NeuronAGF _gt 0.15" args="L3NeuronAGF"/>
+                    <ConditionParameter selectionLigand="L3NeuronAGF" selectionType="Antigradient" />
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L1NeuronAxonGrowOff" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L3NeuronAGFCheckSignal" condition="OnConditionFalse"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L3->L2-->
+            <SignalingPathway id="L3NeuronAxonGrowOn" duration="1000" initial="false">
+                <Condition>
+                    <Predicate rule="L2NeuronAGF _gt 0.1" args="L2NeuronAGF"/>
+                    <ConditionParameter selectionLigand="L2NeuronAGF" selectionType="Gradient" />
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronCAFCheckSignal" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L2NeuronAGFCheckSignal" condition="OnConditionFalse"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L3->L2-->
+            <SignalingPathway id="L3NeuronAxonGrowOff" duration="1000" initial="false">
+                <Condition>
+                    <Predicate rule="L2NeuronAGF _gt 0.15" args="L2NeuronAGF"/>
+                    <ConditionParameter selectionLigand="L2NeuronAGF" selectionType="Antigradient" />
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L3NeuronAxonGrowOff" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L2NeuronAGFCheckSignal" condition="OnConditionFalse"/>
+                </Cascades>
+            </SignalingPathway>
+
+
+            <!--L2->L4-->
+            <SignalingPathway id="L2NeuronAxonGrowOn" duration="1000" initial="false">
+                <Condition>
+                    <Predicate rule="L4NeuronAGF _gt 0.1" args="L4NeuronAGF"/>
+                    <ConditionParameter selectionLigand="L4NeuronAGF" selectionType="Gradient" />
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L4NeuronCAFCheckSignal" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L4NeuronAGFCheckSignal" condition="OnConditionFalse"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L2NeuronAxonGrowOff" duration="1000" initial="false">
+                <Condition>
+                    <Predicate rule="L4NeuronAGF _gt 0.15" args="L4NeuronAGF"/>
+                    <ConditionParameter selectionLigand="L4NeuronAGF" selectionType="Antigradient" />
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronAxonGrowOff" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L4NeuronAGFCheckSignal" condition="OnConditionFalse"/>
+                </Cascades>
+            </SignalingPathway>
+
+        </Mechanism>
+
+        <Mechanism type="CheckSignalsWithDisruptAll">
+
+            <SignalingPathway id="NPCDifferentiateChoice" duration="2000" initial="false">
+                <Condition>
+                    <Predicate rule="NPCF _gt 0.0" args="NPCF"
+                               distribution="Gaussian" distributionVariable="NPCF" distributionParameters="3.25,0.59"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NPCToBPCDifferentiate" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="NPCToRGCDifferentiate" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="NPCApoptizeCheckSignals" duration="69000" initial="true">
+                <Condition>
+                    <Predicate rule="NSCF _lt 0.1" args="NSCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NPCApoptizeCheckSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="NPCApoptize" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="RGCDifferentiateCheckSignals" duration="10000" initial="true">
+                <Condition>
+                    <Predicate rule="NSCF _gt 0.0" args="NSCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="RGCToGRPDifferentiate" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="BPCDifferentiateCheckSignals" duration="10000" initial="true">
+                <Condition>
+                    <Predicate rule="NSCF _gt 0.0" args="NSCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="BPCToNRPDifferentiate" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="GRPCheckDifferentiationSignals" duration="700" initial="true">
+                <Condition>
+                    <Predicate rule="NSCF _gt 0.0" args="NSCF" distribution="Gaussian"
+                               distributionParameters="1,0.5" distributionVariable="NSCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="GRPToOligodendrocyteType2AstrocytePrecursorDifferentiate" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="GRPToType1AstrocyteDifferentiate" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="OligodendrocyteType2AstrocytePrecursorCheckDifferentiationSignals" duration="700" initial="true">
+                <Condition>
+                    <Predicate rule="NSCF _gt 0.0" args="NSCF" distribution="Gaussian"
+                               distributionParameters="1,0.5" distributionVariable="NSCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="OligodendrocyteType2AstrocytePrecursorToType2AstrocyteDifferentiate" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="OligodendrocyteType2AstrocytePrecursorToOligodendrocyteDifferentiate" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+        </Mechanism>
+
+        <Mechanism type="Differentiate">
+            <SignalingPathway id="NPCToRGCDifferentiate" duration="100" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="RadialGliaCell"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="NPCToBPCDifferentiate" duration="100" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="BasalProgenitorCell"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="RGCToGRPDifferentiate" duration="100" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="GlialRestrictedProgenitorCell"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="BPCToNRPDifferentiate" duration="100" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="NeuronalRestrictedProgenitorCell"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="NRPToL1NeuronDifferentiate" duration="100" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L1Neuron"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="NRPToL2NeuronDifferentiate" duration="100" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L2Neuron"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="NRPToL3NeuronDifferentiate" duration="100" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L3Neuron"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="NRPToL4NeuronDifferentiate" duration="100" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L4Neuron"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="GRPToType1AstrocyteDifferentiate" duration="100" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="Type1AstrocyteCell"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="GRPToOligodendrocyteType2AstrocytePrecursorDifferentiate" duration="100" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="OligodendrocyteType2AstrocytePrecursorCell"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="OligodendrocyteType2AstrocytePrecursorToOligodendrocyteDifferentiate" duration="100" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="OligodendrocyteCell"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="OligodendrocyteType2AstrocytePrecursorToType2AstrocyteDifferentiate" duration="100" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="Type2AstrocyteCell"/>
+            </SignalingPathway>
+        </Mechanism>
+    </Mechanisms>
+
+    <ReceptorsDescription>
+    </ReceptorsDescription>
+
+    <Ligands>
+        <!--Neural Stem Cell Factor is secreted by the initial stem cell, regulates the size of resulting structure-->
+        <Ligand id="NSCF" radius="70"/>
+        <!--Neuron Progenitor Cell Factor is secreted by NPCs, which have approached the NSC presence boundary-->
+        <!--after this, NPCF emission is triggered in all NPCs of the structure-->
+        <!--In such a way, transformation process into the successive cell lineage stages is triggered in the direction outside->inside -->
+        <Ligand id="NPCF" radius="2"/>
+        <!--Glial neurotrophic factor is emitted by glias in response to Neuron Factor presence and it is responsible for axon growth processes initiation-->
+        <Ligand id="GNF" radius="5"/>
+        <!--Neuron Factor is emitted by neurons at the start of their existence: it is a signal for glias that neurons are present-->
+        <Ligand id="NF" radius="3"/>
+        <!--Axon growth factors, emitted by dendritic tree. In the "Axons" configuration this function if performed by AGF-->
+        <Ligand id="L2NeuronAGF" radius="10"/>
+        <Ligand id="L3NeuronAGF" radius="28"/>
+        <Ligand id="L4NeuronAGF" radius="25"/>
+        <!--Axon Connection Factor is secreted by dendritic tree and informs axon that it's possible to form a terminal in a given coordinate-->
+        <Ligand id="L2NeuronCAF" radius="1"/>
+        <Ligand id="L3NeuronCAF" radius="1"/>
+        <Ligand id="L4NeuronCAF" radius="1"/>
+        <!--Terminal Formed Factor is emitted by the axon terminal and signals to the dendritic tree that it's time to form a dendritic spine-->
+        <Ligand id="L1NeuronTCF" radius="1"/>
+        <Ligand id="L2NeuronTCF" radius="1"/>
+        <Ligand id="L3NeuronTCF" radius="1"/>
+        <!--Dendritic Spine Formed Factor is emitted by the dendritic spine and signals to the axon terminal about its full readiness to form a synapse-->
+        <Ligand id="L2NeuronDSCF" radius="1"/>
+        <Ligand id="L3NeuronDSCF" radius="1"/>
+        <Ligand id="L4NeuronDSCF" radius="1"/>
+    </Ligands>
+
+    <ModelCells>
+        <!--The initial cell (only one)-->
+        <ModelCell baseType="StemCell" id="NeuralStemCell" immovable="true">
+            <SPs>
+                <SP type="NSCToNPCDivideAndDifferentiate"/>
+                <SP type="NSCFSpread"/>
+            </SPs>
+        </ModelCell>
+
+        <!--Intermediate, "stem", cells-->
+        <ModelCell baseType="StemCell" id="NeuralProgenitorCell"> <!-- type="cell1" movable="true">-->
+            <SPs>
+                <SP type="NPCDivide"/>
+                <SP type="NPCToRGCDifferentiate"/>
+                <SP type="NPCToBPCDifferentiate"/>
+                <SP type="NSCFCheckSignals"/>
+                <SP type="NPCFCheckSignals"/>
+                <SP type="NPCDifferentiateCheckSignals"/>
+                <SP type="NPCDifferentiateChoice"/>
+                <SP type="NPCFSpread"/>
+                <SP type="NPCApoptizeCheckSignals"/>
+                <SP type="NPCApoptize"/>
+
+            </SPs>
+        </ModelCell>
+
+        <!--Radial glia transforms into Glial Restricted Progenitor-->
+        <ModelCell baseType="StemCell" id="RadialGliaCell">
+            <SPs>
+                <SP type="NPCFGather"/>
+                <SP type="RGCNPCFCheckSignals"/>
+                <SP type="RGCDifferentiateCheckSignals"/>
+                <SP type="RGCToGRPDifferentiate"/>
+            </SPs>
+        </ModelCell>
+
+        <!--Basal Progenitor transforms into Neuronal Restricted Progenitor-->
+        <ModelCell baseType="StemCell" id="BasalProgenitorCell">
+            <SPs>
+                <SP type="NPCFGather"/>
+                <SP type="BPCNPCFCheckSignals"/>
+                <SP type="BPCDifferentiateCheckSignals"/>
+                <SP type="BPCToNRPDifferentiate"/>
+            </SPs>
+        </ModelCell>
+
+        <!--Neuronal Restricted Progenitor transforms into different neuron types, depending on factors' concentrations (layered organization)-->
+        <ModelCell baseType="StemCell" id="NeuronalRestrictedProgenitorCell">
+            <SPs>
+                <SP type="NRPToL1NeuronCheckDifferentiationSignals"/>
+                <SP type="NRPToL2NeuronCheckDifferentiationSignals"/>
+                <SP type="NRPToL3NeuronCheckDifferentiationSignals"/>
+                <SP type="NRPToL4NeuronCheckDifferentiationSignals"/>
+                <SP type="NRPToL1NeuronDifferentiate"/>
+                <SP type="NRPToL2NeuronDifferentiate"/>
+                <SP type="NRPToL3NeuronDifferentiate"/>
+                <SP type="NRPToL4NeuronDifferentiate"/>
+            </SPs>
+        </ModelCell>
+
+
+        <!--Glial progenitors and precursors transform into different glia types-->
+        <ModelCell baseType="StemCell" id="GlialRestrictedProgenitorCell">
+            <SPs>
+                <SP type="GRPCheckDifferentiationSignals"/>
+                <SP type="GRPToType1AstrocyteDifferentiate"/>
+                <SP type="GRPToOligodendrocyteType2AstrocytePrecursorDifferentiate"/>
+            </SPs>
+        </ModelCell>
+        <ModelCell baseType="StemCell" id="OligodendrocyteType2AstrocytePrecursorCell">
+            <SPs>
+                <SP type="OligodendrocyteType2AstrocytePrecursorCheckDifferentiationSignals"/>
+                <SP type="OligodendrocyteType2AstrocytePrecursorToOligodendrocyteDifferentiate"/>
+                <SP type="OligodendrocyteType2AstrocytePrecursorToType2AstrocyteDifferentiate"/>
+            </SPs>
+        </ModelCell>
+
+        <!--Type 1 Astrocyte-->
+        <ModelCell baseType="GlialCell" id="Type1AstrocyteCell">
+            <SPs>
+                <SP type="GNFSpread"/>
+                <SP type="NFCheckSignals"/>
+            </SPs>
+        </ModelCell>
+
+        <!--Oligodendrocyte-->
+        <ModelCell baseType="GlialCell" id="OligodendrocyteCell">
+            <SPs>
+                <SP type="GNFSpread"/>
+                <SP type="NFCheckSignals"/>
+            </SPs>
+        </ModelCell>
+
+        <!--Type 2 Astrocyte-->
+        <ModelCell baseType="GlialCell" id="Type2AstrocyteCell">
+            <SPs>
+                <SP type="GNFSpread"/>
+                <SP type="NFCheckSignals"/>
+            </SPs>
+        </ModelCell>
+
+        <!--L1 Neuron with axon and no dendrites-->
+        <ModelCell baseType="NeuronCell" id="L1Neuron" immovable="true">
+            <SPs>
+                <SP type="NFSpread"/>
+                <SP type="L1NeuronGNFCheckSignals"/>
+                <SP type="L1NeuronAxonForm"/>
+            </SPs>
+            <Compartments>
+                <Compartment baseType="Axon" id="L1NeuronAxon" unique="true">
+                    <SPs>
+                        <SP type="L3NeuronAGFCheckSignal"/>
+                        <SP type="L1NeuronAxonGrowOn"/>
+                        <SP type="L1NeuronAxonGrowOff"/>
+                        <SP type="L1NeuronAxonalTerminalForm"/>
+                        <SP type="L3NeuronCAFCheckSignal"/>
+                    </SPs>
+                </Compartment>
+                <!--L1->L3-->
+                <Compartment baseType="AxonalTerminal" id="L1NeuronAxonalTerminal" unique="false">
+                    <SPs>
+                        <SP type="L1NeuronTCFSpread"/>
+                        <SP type="L1NeuronTCFGather"/>
+                        <SP type="L3NeuronDSCFCheckSignal"/>
+                        <SP type="L1NeuronSynapseForm"/>
+                    </SPs>
+                </Compartment>
+                <Compartment baseType="Synapse" id="L1NeuronSynapse" unique="false"/>
+            </Compartments>
+        </ModelCell>
+
+        <!--L2 Neuron with both dendrite and axon-->
+        <ModelCell baseType="NeuronCell" id="L2Neuron" immovable="true">
+            <SPs>
+                <SP type="NFSpread"/>
+                <SP type="L2NeuronGNFCheckSignals"/>
+                <SP type="L2NeuronAxonForm"/>
+                <SP type="L2NeuronDendriteTreeForm"/>
+            </SPs>
+            <Compartments>
+                <Compartment baseType="Axon" id="L2NeuronAxon" unique="true">
+                    <SPs>
+                        <SP type="L4NeuronAGFCheckSignal"/>
+                        <SP type="L2NeuronAxonGrowOn"/>
+                        <SP type="L2NeuronAxonGrowOff"/>
+                        <SP type="L2NeuronAxonalTerminalForm"/>
+                        <SP type="L4NeuronCAFCheckSignal"/>
+                    </SPs>
+                </Compartment>
+                <!--L2->l4-->
+                <Compartment baseType="AxonalTerminal" id="L2NeuronAxonalTerminal" unique="false">
+                    <SPs>
+                        <SP type="L2NeuronTCFSpread"/>
+                        <SP type="L2NeuronTCFGather"/>
+                        <SP type="L4NeuronDSCFCheckSignal"/>
+                        <SP type="L2NeuronSynapseForm"/>
+                    </SPs>
+                </Compartment>
+                <Compartment baseType="Synapse" id="L2NeuronSynapse" unique="false"/>
+
+                <!--l3->L2-->
+                <Compartment baseType="DendriteTree" id="L2NeuronDendriteTree" unique="true">
+                    <SPs>
+                        <SP type="L2NeuronAGFSpread"/>
+                        <SP type="L2NeuronCAFSpread"/>
+                        <SP type="L3NeuronTCFCheckSignal"/>
+                        <SP type="L2NeuronDendriticSpineForm"/>
+                    </SPs>
+                </Compartment>
+                <Compartment baseType="DendriticSpine" id="L2NeuronDendriticSpine" unique="false">
+                    <SPs>
+                        <SP type="L2NeuronDSCFSpread"/>
+                        <SP type="L2NeuronDSCFGather"/>
+                    </SPs>
+                </Compartment>
+            </Compartments>
+        </ModelCell>
+
+        <!--L3 Neuron with both dendrite and axon-->
+        <ModelCell baseType="NeuronCell" id="L3Neuron" immovable="true">
+            <SPs>
+                <SP type="NFSpread"/>
+                <SP type="L3NeuronGNFCheckSignals"/>
+                <SP type="L3NeuronAxonForm"/>
+                <SP type="L3NeuronDendriteTreeForm"/>
+            </SPs>
+            <Compartments>
+                <Compartment baseType="Axon" id="L3NeuronAxon" unique="true">
+                    <SPs>
+                        <SP type="L2NeuronAGFCheckSignal"/>
+                        <SP type="L3NeuronAxonGrowOn"/>
+                        <SP type="L3NeuronAxonGrowOff"/>
+                        <SP type="L3NeuronAxonalTerminalForm"/>
+                        <SP type="L2NeuronCAFCheckSignal"/>
+                    </SPs>
+                </Compartment>
+                <!--L3->l2-->
+                <Compartment baseType="AxonalTerminal" id="L3NeuronAxonalTerminal" unique="false">
+                    <SPs>
+                        <SP type="L3NeuronTCFSpread"/>
+                        <SP type="L3NeuronTCFGather"/>
+                        <SP type="L2NeuronDSCFCheckSignal"/>
+                        <SP type="L3NeuronSynapseForm"/>
+                    </SPs>
+                </Compartment>
+                <Compartment baseType="Synapse" id="L3NeuronSynapse" unique="false"/>
+
+                <!--l1->L3-->
+                <Compartment baseType="DendriteTree" id="L3NeuronDendriteTree" unique="true">
+                    <SPs>
+                        <SP type="L3NeuronAGFSpread"/>
+                        <SP type="L3NeuronCAFSpread"/>
+                        <SP type="L1NeuronTCFCheckSignal"/>
+                        <SP type="L3NeuronDendriticSpineForm"/>
+                    </SPs>
+                </Compartment>
+                <Compartment baseType="DendriticSpine" id="L3NeuronDendriticSpine" unique="false">
+                    <SPs>
+                        <SP type="L3NeuronDSCFSpread"/>
+                        <SP type="L3NeuronDSCFGather"/>
+                    </SPs>
+                </Compartment>
+            </Compartments>
+        </ModelCell>
+
+        <!--L4 Neuron with a dendrite and no axon-->
+        <ModelCell baseType="NeuronCell" id="L4Neuron" immovable="true">
+            <SPs>
+                <SP type="NFSpread"/>
+                <SP type="L4NeuronGNFCheckSignals"/>
+                <SP type="L4NeuronDendriteTreeForm"/>
+            </SPs>
+            <Compartments>
+                <!--l2->L4-->
+                <Compartment baseType="DendriteTree" id="L4NeuronDendriteTree" unique="true">
+                    <SPs>
+                        <SP type="L4NeuronAGFSpread"/>
+                        <SP type="L4NeuronCAFSpread"/>
+                        <SP type="L2NeuronTCFCheckSignal"/>
+                        <SP type="L4NeuronDendriticSpineForm"/>
+                    </SPs>
+                </Compartment>
+                <Compartment baseType="DendriticSpine" id="L4NeuronDendriticSpine" unique="false">
+                    <SPs>
+                        <SP type="L4NeuronDSCFSpread"/>
+                        <SP type="L4NeuronDSCFGather"/>
+                    </SPs>
+                </Compartment>
+
+            </Compartments>
+        </ModelCell>
+    </ModelCells>
+
+    <SignalPoints></SignalPoints>
+</BCNNM>

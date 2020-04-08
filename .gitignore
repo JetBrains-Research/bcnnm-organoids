@@ -1,0 +1,9 @@
+
+*.iml
+*.mf
+.gradle/
+.idea/
+
+out/
+results/
+*.json
