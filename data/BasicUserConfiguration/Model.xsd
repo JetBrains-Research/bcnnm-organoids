@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--DO NOT!!!!!! REGENERATE THIS MODEL USING STANDARD GENERATORS. WRITE IT MANUALLY!-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xs:element name="BCNNM">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="System">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Space"/>
+                            <xs:element name="Pipeline">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element ref="Stage" minOccurs="1" maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Training" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Datasets" maxOccurs="1" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element ref="Dataset" minOccurs="0" maxOccurs="unbounded"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="lqWindowSize" type="xs:int"/>
+                                    <xs:attribute name="clusteringSeedCount" type="xs:int"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="Mechanisms" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Mechanism" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="ReceptorsDescription" maxOccurs="1" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="ReceptorDescription" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="Ligands" maxOccurs="1" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Ligand" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="ModelCells" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="ModelCell" minOccurs="1" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="SignalPoints" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="SignalPoint" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--ELEMENTS-->
+
+    <xs:element name="Space">
+        <xs:complexType>
+            <xs:attribute name="limit" type="xs:nonNegativeInteger"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Stage">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:long"/>
+            <xs:attribute name="mode" type="StageMode"/>
+            <xs:attribute name="type" type="StagePipelineType" use="optional"/>
+            <xs:attribute name="datasetType" type="DatasetType" use="optional"/>
+            <xs:attribute name="dataset" type="DatasetSource" use="optional"/>
+            <xs:attribute name="size" type="xs:int" use="optional"/>
+            <xs:attribute name="ratio" type="xs:double" use="optional"/>
+            <xs:attribute name="cellType" type="xs:string" use="optional"/>
+            <xs:attribute name="target" type="StageTarget" use="optional"/>
+            <xs:attribute name="pharma" type="xs:string" use="optional"/>
+            <xs:attribute name="time" type="xs:long" use="optional"/>
+            <xs:attribute name="scoring" type="xs:string" use="optional"/>
+            <xs:attribute name="customSP" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Dataset">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="classCount" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="type" type="xs:string"/>
+            <xs:attribute name="filename" type="xs:string"/>
+            <xs:attribute name="size" type="xs:int"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!--MECHANISMS-->
+
+    <xs:element name="Mechanism">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="SignalingPathway" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SignalingPathway">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Condition" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Predicate" minOccurs="0"/>
+                            <xs:element ref="ConditionParameter" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element ref="ExecuteParameter" minOccurs="0" maxOccurs="1"/>
+
+                <xs:element name="Cascades" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Cascade" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="duration" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="initial" type="xs:boolean"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Predicate">
+        <xs:complexType>
+            <xs:attribute name="rule" type="xs:string"/>
+            <xs:attribute name="args" type="xs:string"/>
+            <xs:attribute name="distribution" type="Distribution" use="optional"/>
+            <xs:attribute name="distributionVariable" type="xs:string" use="optional"/>
+            <xs:attribute name="distributionParameters" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ExecuteParameter">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="creationType" type="xs:string" use="optional"/>
+            <xs:attribute name="ligand" type="xs:string" use="optional"/>
+            <xs:attribute name="probability" type="xs:double" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ConditionParameter">
+        <xs:complexType>
+            <xs:attribute name="selectionLigand" type="xs:string"/>
+            <xs:attribute name="selectionType" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Cascade">
+        <xs:complexType>
+            <xs:attribute name="pathway" type="xs:string" use="required"/>
+            <xs:attribute name="action" type="EventInfluence" use="required"/>
+            <xs:attribute name="condition" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!--CELLS-->
+
+    <xs:element name="SP">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Compartment">
+        <xs:complexType>
+            <xs:sequence>
+                <!--<xs:element name="Receptors" minOccurs="0">-->
+                <!--<xs:complexType>-->
+                <!--<xs:sequence maxOccurs="unbounded">-->
+                <!--<xs:element ref="Receptor"/>-->
+                <!--</xs:sequence>-->
+                <!--</xs:complexType>-->
+                <!--</xs:element>-->
+                <xs:element name="SPs" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded">
+                            <xs:element ref="SP" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="baseType" type="CompartmentType"/>
+            <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="unique" type="xs:boolean"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ModelCell">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="SPs" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded">
+                            <xs:element ref="SP" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Compartments" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Compartment" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="baseType" type="CellType" use="required"/>
+            <xs:attribute name="immovable" type="xs:boolean" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Receptor">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string"/>
+            <xs:attribute name="sp" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!--LIGANDS-->
+
+    <xs:element name="Ligand">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="radius" type="xs:nonNegativeInteger"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!--RECEPTORS-->
+
+    <xs:element name="ReceptorDescription">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="ligand" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SignalPoint">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="SPs" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="SP" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+
+
+
+
+    <!--TYPES-->
+
+    <xs:simpleType name="StageMode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Development"/>
+            <xs:enumeration value="Damage"/>
+            <xs:enumeration value="Learning"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="StagePipelineType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Trauma"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="DatasetType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Train"/>
+            <xs:enumeration value="Control"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="DatasetSource">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="MNIST"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="CellType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="StemCell"/>
+            <xs:enumeration value="NeuronCell"/>
+            <xs:enumeration value="GlialCell"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="CompartmentType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Axon"/>
+            <xs:enumeration value="AxonalTerminal"/>
+            <xs:enumeration value="DendriteTree"/>
+            <xs:enumeration value="DendriticSpine"/>
+            <xs:enumeration value="Synapse"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="StageTarget">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Random"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="EventInfluence">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Execute"/>
+            <xs:enumeration value="Disrupt"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="Distribution">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Binomial"/>
+            <xs:enumeration value="Pascal"/>
+            <xs:enumeration value="Poisson"/>
+            <xs:enumeration value="Exponential"/>
+            <xs:enumeration value="Gaussian"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+</xs:schema>

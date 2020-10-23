@@ -1,0 +1,75 @@
+<BCNNM>
+    <System>
+        <Space limit="100"/>
+        <Pipeline>
+            <Stage id="0" mode="Development" time="100000"/>
+        </Pipeline>
+    </System>
+
+    <Mechanisms>
+        <Mechanism type="DivideAndDifferentiate">
+            <!-->The signaling pathway parameterizes the basic mechanism with specific arguments<-->
+            <SignalingPathway id="PluripotentStemCellASymmetricDivision" duration="500" initial="false">
+                <!-->Set the result of this mechanism: creating an object<-->
+                <ExecuteParameter type="ObjectCreateParameters" creationType="TotipotentStemCell"/>
+            </SignalingPathway>
+        </Mechanism>
+
+        <Mechanism type="Divide">
+            <SignalingPathway id="PluripotentStemCellSymmetricDivision" duration="600" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="PluripotentStemCell"/>
+            </SignalingPathway>
+        </Mechanism>
+
+        <Mechanism type="CheckSignals">
+            <SignalingPathway id="DivisionChoice" duration="1000" initial="true">
+                <!-->Define the conditions checked by this SP<-->
+                <Condition>
+                    <Predicate rule="TSC _lt 0.5 OR TSC _gt 5" args="TSC"/>
+                </Condition>
+                <Cascades>
+                    <!-->Set the behavior depending on whether conditions are met<-->
+                    <Cascade pathway="PluripotentStemCellASymmetricDivision" action="Execute" condition="OnConditionTrue"/>
+                    <Cascade pathway="PluripotentStemCellSymmetricDivision" action="Execute" condition="OnConditionFalse"/>
+                    <!-->Regardless of whether the condition is met, the SP will restart itself<-->
+                    <Cascade pathway="DivisionChoice" action="Execute" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+        </Mechanism>
+
+        <Mechanism type="SpreadChemicalSignal">
+            <SignalingPathway id="TSCSpread" duration="100" initial="true">
+                <!-->Set the result of this mechanism: emitting a signal into space<-->
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="TSC"/>
+                <Cascades>
+                    <Cascade pathway="TSCSpread" action="Execute" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+        </Mechanism>
+    </Mechanisms>
+
+    <Ligands>
+        <Ligand id="TSC" radius="5"/>
+    </Ligands>
+
+    <ModelCells>
+        <!-->Cell PluripotentStemCell<-->
+        <ModelCell baseType="StemCell" id="PluripotentStemCell">
+            <!-->All SPs available to this cell<-->
+            <SPs>
+                <SP type="DivisionChoice"/>
+                <SP type="PluripotentStemCellASymmetricDivision"/>
+                <SP type="PluripotentStemCellSymmetricDivision"/>
+            </SPs>
+        </ModelCell>
+
+        <!-->Cell TotipotentStemCell<-->
+        <ModelCell baseType="StemCell" id="TotipotentStemCell">
+            <!-->All SPs available to this cell<-->
+            <SPs>
+                <SP type="TSCSpread"/>
+            </SPs>
+        </ModelCell>
+
+    </ModelCells>
+</BCNNM>

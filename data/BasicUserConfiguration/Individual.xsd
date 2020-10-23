@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018. This file was made as a part of BCNNM@JetBrains_Research work.
+  -->
+
+<!--
+  ~ DO NOT!!!!!! REGENERATE THIS MODEL USING STANDARD GENERATORS. WRITE IT MANUALLY!
+  -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xs:element name="Individual">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Objects" minOccurs="1" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Object" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="SpaceState" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="State" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+
+
+    <xs:element name="Object">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:nonNegativeInteger" use="required"/>
+            <xs:attribute name="group" type="xs:string" use="optional"/>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="x" type="xs:int" use="required"/>
+            <xs:attribute name="y" type="xs:int" use="required"/>
+            <xs:attribute name="z" type="xs:int" use="required"/>
+            <xs:attribute name="axonConnections" type="xs:string" use="optional"/>
+            <xs:attribute name="dendriteConnections" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="State">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:nonNegativeInteger" use="required"/>
+            <xs:attribute name="ligand" type="xs:nonNegativeInteger" use="required"/>
+            <xs:attribute name="radius" type="xs:nonNegativeInteger" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
