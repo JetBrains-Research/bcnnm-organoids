@@ -467,6 +467,7 @@ public class PlatformConfiguration {
                                 //parse ExecuteParameter
                                 if (xmlSignalingPathway.getExecuteParameter() != null) {
                                     if (xmlSignalingPathway.getExecuteParameter().getCreationType() != null) {
+
 //                                        final Cell targetCell = cellsConfiguration.getCell(xmlSignalingPathway.getExecuteParameter().getCreationType());
 //                                        if (targetCell == null)
 //                                            printErrorAndExit("Signaling pathway %s contains unknown ObjectCreateParameters: %s. Check SP and Cells configuration.",
@@ -557,8 +558,10 @@ public class PlatformConfiguration {
         });
     }
 
-    private void loadReceptorsConfiguration(@NotNull BCNNM.ReceptorsDescription receptors) {
-        PriorityTraceWriter.println("===Loading Ligands configuration===", 0);
+    private void loadReceptorsConfiguration(BCNNM.ReceptorsDescription receptors) {
+        if (receptors == null) return;
+
+        PriorityTraceWriter.println("===Loading Receptors configuration===", 0);
         this.receptorsDescriptionConfiguration = new ReceptorsDescriptionConfiguration();
         receptors.getReceptorDescription().forEach(receptor -> {
             if (ligandsConfiguration.getLigand(receptor.getLigand()) == null)

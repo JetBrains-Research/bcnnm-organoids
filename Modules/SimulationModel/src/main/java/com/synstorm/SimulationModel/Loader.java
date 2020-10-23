@@ -55,14 +55,12 @@ public enum Loader {
 
 
     private void makeModelObjects() {
-//        platformLoader.getPlatformConfiguration().getCellsConfiguration().getAllCells()
-//                .forEach(cell -> ModelConfig.INSTANCE.addLogicObjectDescription(cell.getId(), cell));
-
         platformLoader.getPlatformConfiguration().getCellsConfiguration().getAllCells()
                 .forEach(cell -> ModelConfig.INSTANCE.addCellObjectDescriptions(cell.getAllObjectDescriptions()));
 
-        platformLoader.getPlatformConfiguration().getModelSignalPointsConfiguration().getAvailableModelSignalPoints()
-                .forEach(modelSignalPoint -> ModelConfig.INSTANCE.addLogicObjectDescription(modelSignalPoint.getId(), modelSignalPoint));
+        if (platformLoader.getPlatformConfiguration().getModelSignalPointsConfiguration() != null)
+            platformLoader.getPlatformConfiguration().getModelSignalPointsConfiguration().getAvailableModelSignalPoints()
+                    .forEach(modelSignalPoint -> ModelConfig.INSTANCE.addLogicObjectDescription(modelSignalPoint.getId(), modelSignalPoint));
 
         platformLoader.getPlatformConfiguration().getIndividualConfiguration().getSpaceObjects()
                 .forEach(ModelConfig.INSTANCE::addObjectInstance);
@@ -70,18 +68,6 @@ public enum Loader {
     }
 
     private void makeModelPipeline() {
-        /*List<Stage> stageList = platformLoader.getPlatformConfiguration().getSystemConfiguration().getPipeline().getStageList();
-        for (int i = 0; i < stageList.size(); i++) {
-            Stage stage = stageList.get(i);
-            ModelStage modelStage = new ModelStage(
-                    i,
-                    stage.getStageAttribute(StageAttribute.mode).getModelStageAction(),
-                    stage.getStageAttributes()
-            );
-
-            ModelPipeline.INSTANCE.addStage(i, modelStage);
-        }*/
-
         platformLoader.getPlatformConfiguration().getSystemConfiguration().getPipeline().getStageList()
                 .forEach(xStage -> {
                     ModelStage modelStage = StageFactory.INSTANCE.createStage(
@@ -91,7 +77,4 @@ public enum Loader {
                 });
     }
 
-//    public void saveIndividual(IndividualConfiguration individualConfiguration, String pathPrefix, String individualXmlFilename) {
-//        platformLoader.saveIndividualConfiguration(individualConfiguration, pathPrefix, individualXmlFilename);
-//    }
 }

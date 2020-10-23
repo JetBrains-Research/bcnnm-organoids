@@ -12,8 +12,8 @@ public class CsvSpaceSnapshotExporter extends CsvFileExporter {
 
     //region Constructors
 
-    public CsvSpaceSnapshotExporter() {
-        super(".SpaceSnapshot.csv");
+    public CsvSpaceSnapshotExporter(long ticks) {
+        super("_" + ticks +".SpaceSnapshot.csv");
     }
 
     //endregion

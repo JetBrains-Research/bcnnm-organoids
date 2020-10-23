@@ -19,6 +19,7 @@ import com.synstorm.common.Utils.FileModelExport.*;
 import com.synstorm.common.Utils.ModelExport.EmptyExporter;
 import com.synstorm.common.Utils.ModelExport.IModelDataExporter;
 import com.synstorm.common.Utils.ModelStatistic.IndividualStatistics;
+import com.synstorm.common.Utils.PlatformLoaders.Objects.SystemObjects.Parameters.StageAttribute;
 import com.synstorm.common.Utils.SimArgs.SimulationArguments;
 import com.synstorm.common.Utils.SimulationEvents.IndividualEvents.StatisticSingleFormEvent;
 import com.synstorm.common.Utils.TraceMessageWriter.PriorityTraceWriter;
@@ -76,7 +77,12 @@ public abstract class BaseModelProcessor implements IIndividualAgentListener {
         populationVolume = calculatePopulationVolume();
         statisticsExporter = new JsonStatisticsExporter();
         simulationExporters = new ArrayList<>();
-        spaceSnapshotExporter = new CsvSpaceSnapshotExporter();
+        spaceSnapshotExporter = new CsvSpaceSnapshotExporter(
+                Loader.INSTANCE.getPlatformConfiguration()
+                        .getSystemConfiguration()
+                        .getPipeline().getStageList().get(0)
+                        .getStageAttribute(StageAttribute.time)
+                        .getLongValue());
         axonLengthExporter = new CsvAxonLengthExporter();
         calculationResults = new ConcurrentHashMap<>();
         calculatedAgents = new LinkedBlockingDeque<>();

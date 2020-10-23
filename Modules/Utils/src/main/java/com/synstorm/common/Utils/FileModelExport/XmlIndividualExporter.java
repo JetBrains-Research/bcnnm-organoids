@@ -25,6 +25,13 @@ public class XmlIndividualExporter extends XmlFileExporter {
         super(uuidAsString + "_Individual.xml");
         this.initialized = initXmlTools();
     }
+
+    public XmlIndividualExporter(String uuidAsString, long ticks) {
+        super(uuidAsString + "_" + ticks + "_Individual.xml");
+        this.initialized = initXmlTools();
+    }
+
+
     //endregion
 
 
