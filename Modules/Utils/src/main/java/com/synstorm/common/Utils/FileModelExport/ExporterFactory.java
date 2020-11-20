@@ -125,6 +125,7 @@ public enum ExporterFactory {
         simpleExporters.put("LearningScoreTableExporter",          ExporterFactory::createLearningScoreTableExporter);
         simpleExporters.put("ScoreTableExporter",                  ExporterFactory::createScoreTableExporter);
         simpleExporters.put("XmlIndividualExporter",               ExporterFactory::createXmlIndividualExporter);
+        simpleExporters.put("ConcentrationsExporter",              ExporterFactory::createConcentrationsExporter);
     }
 
     private void initializeParametrizedMap() {
@@ -137,6 +138,7 @@ public enum ExporterFactory {
     static private IModelDataExporter createJsonStatisticsExporter(String prefix)               { return new JsonStatisticsExporter();}
     static private IModelDataExporter createLearningScoreTableExporter(String prefix)           { return new LearningScoreTableExporter();}
     static private IModelDataExporter createScoreTableExporter(String prefix)                   { return new ScoreTableExporter();}
+    static private IModelDataExporter createConcentrationsExporter(String prefix)               { return new ConcentrationsExporter();}
 
     // with prefix
     static private IModelDataExporter createJsonAnswersExporter(String prefix)      { return new JsonAnswersExporter(prefix);}

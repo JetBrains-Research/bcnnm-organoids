@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Individual id="00000000-0000-0000-0000-000000000000">
+    <Objects>
+        <!--START CELLs-->
+        <Object id="0" group="L2Neurons" type="L2Neuron" x="45" y="50" z="50"/>
+        <Object id="1" group="L4Neurons" type="L4Neuron" x="50" y="50" z="50"/>
+        <Object id="2" group="L4Neurons" type="L4Neuron" x="56" y="55" z="50"/>
+        <Object id="3" group="L4Neurons" type="L4Neuron" x="56" y="45" z="50"/>
+        <Object id="4" group="L4Neurons" type="L4Neuron" x="56" y="50" z="50"/>
+    </Objects>
+</Individual>

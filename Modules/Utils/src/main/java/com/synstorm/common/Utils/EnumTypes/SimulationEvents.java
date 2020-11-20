@@ -34,5 +34,6 @@ public enum SimulationEvents {
     LearningScoreTableFormRowEvent,
     ActionToGenesMapEvent,
     SpreadChemicalSignal,
-    GatherChemicalSignal
+    GatherChemicalSignal,
+    ConcentrationChangeEvent
 }

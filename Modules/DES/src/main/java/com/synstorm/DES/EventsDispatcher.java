@@ -89,7 +89,11 @@ public final class EventsDispatcher {
 
     public List<IEventExecutionResult> calculateNextTick() {
         calculationResult.clear();
-        currentTick = eventTime.remove();
+        if (!eventTime.isEmpty())
+            currentTick = eventTime.remove();
+        else
+            return calculationResult.getResponses();
+
         final List<ModelEvent> curEvents = eventsDic.get(currentTick);
 
         curEvents.forEach(e -> {

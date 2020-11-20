@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<BCNNM>
+    <System>
+        <Space limit="100"/>
+        <Pipeline>
+            <Stage id="0" mode="Development" time="10000"/>
+        </Pipeline>
+    </System>
+
+    <Mechanisms>
+        <Mechanism type="SpreadChemicalSignal">
+            <!--Long-distance stem cell factor emission-->
+            <SignalingPathway id="NSCFSpread" duration="200" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="NSCF"/>
+                <Cascades>
+                    <Cascade pathway="NSCFSpread" action="Execute" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+        </Mechanism>
+
+    </Mechanisms>
+
+    <ReceptorsDescription>
+    </ReceptorsDescription>
+
+    <Ligands>
+        <!--Neural Stem Cell Factor is secreted by the initial stem cell, regulates the size of resulting structure-->
+        <Ligand id="NSCF" radius="30"/>
+    </Ligands>
+
+    <ModelCells>
+        <!--The initial cell (only one)-->
+        <ModelCell baseType="StemCell" id="NeuralStemCell" immovable="true">
+            <SPs>
+                <SP type="NSCFSpread"/>
+            </SPs>
+        </ModelCell>
+    </ModelCells>
+
+    <SignalPoints></SignalPoints>
+</BCNNM>

@@ -11,6 +11,7 @@ import com.synstorm.common.Utils.EnumTypes.SignalSelectionType;
 import com.synstorm.common.Utils.Mechanisms.MechanismResponse.ObjectMovedResponse;
 import com.synstorm.common.Utils.SignalCoordinateProbability.CoordinateProbabilityR;
 import com.synstorm.common.Utils.SignalCoordinateProbability.SignalsProbability;
+import com.synstorm.common.Utils.SimulationEvents.IndividualEvents.ConcentrationChangeEvent;
 import com.synstorm.common.Utils.SimulationEvents.IndividualEvents.ObjectMoveEventR;
 import gnu.trove.list.array.TDoubleArrayList;
 import gnu.trove.map.hash.TIntIntHashMap;
@@ -75,7 +76,18 @@ public class Shell {
     }
 
     public void recalculateSignalSpreading() {
-        space.recalculateSignals();
+        //        space.recalculateSignals();
+
+        List<ConcentrationChangeEvent> events = space.recalculateSignals();
+
+        // foreach cannot mutate
+        // apply make a copy and I want to avoid it
+        for(int i = 0; i < events.size(); ++i)
+        {
+            events.get(i).setTick(Model.INSTANCE.getNextTick());
+        }
+
+        events.forEach(Model.INSTANCE::proceedExportAndStatistic);
     }
 
     public boolean updateObjectState(int objectId, ObjectState state) {

@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<BCNNM>
+    <System>
+        <Space limit="100"/>
+        <Pipeline>
+            <Stage id="0" mode="Development" time="100000"/>
+        </Pipeline>
+    </System>
+
+    <Mechanisms>
+        <Mechanism type="SpreadChemicalSignal">
+            <!--Neuron presence factor emission to trigger GNF secretion by glial cells-->
+            <SignalingPathway id="NFSpread" duration="100" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="NF"/>
+            </SignalingPathway>
+
+            <!--Glial cells secret GNF, which triggers axon terminal formation-->
+            <SignalingPathway id="GNFSpread" duration="100" initial="false">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="GNF"/>
+            </SignalingPathway>
+
+            <!--L3->L2-->
+            <SignalingPathway id="L2NeuronAGFSpread" duration="2000" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L2NeuronAGF"/>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronAGFSpread" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronAGFSpread" duration="2000" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L4NeuronAGF"/>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L4NeuronAGFSpread" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronCAFSpread" duration="10" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L4NeuronCAF"/>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L2NeuronTCFSpread" duration="10" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L2NeuronTCF"/>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronTCFGather" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronDSCFSpread" duration="10" initial="true">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L4NeuronDSCF"/>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L4NeuronDSCFGather" condition="Default"/>
+                </Cascades>
+            </SignalingPathway>
+
+        </Mechanism>
+
+        <Mechanism type="GatherChemicalSignal">
+            <!--L2->L4-->
+            <SignalingPathway id="L2NeuronTCFGather" duration="20" initial="false">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L2NeuronTCF"/>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronDSCFGather" duration="20" initial="false">
+                <ExecuteParameter type="ChemicalSignalParameters" ligand="L4NeuronDSCF"/>
+            </SignalingPathway>
+        </Mechanism>
+
+        <Mechanism type="CheckSignals">
+            <SignalingPathway id="L2NeuronGNFCheckSignals" duration="1000" initial="true">
+                <Condition>
+                    <Predicate rule="GNF _~gt 0.5" args="GNF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NFSpread" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="L2NeuronGNFCheckSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="L2NeuronAxonForm" action="Execute" condition="OnConditionTrue"/>
+<!--                    <Cascade pathway="L2NeuronDendriteTreeForm" action="Execute" condition="OnConditionTrue"/>-->
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="L4NeuronGNFCheckSignals" duration="2000" initial="true">
+                <Condition>
+                    <Predicate rule="GNF _~gt 0.5" args="GNF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NFSpread" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="L4NeuronGNFCheckSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="L4NeuronDendriteTreeForm" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <SignalingPathway id="NFCheckSignals" duration="200" initial="true">
+                <Condition>
+                    <Predicate rule="NF _~gt 0.2 AND GNF _lt 2.5" args="NF,GNF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade pathway="NFCheckSignals" action="Execute" condition="OnConditionFalse"/>
+                    <Cascade pathway="NFCheckSignals" action="Execute" condition="OnConditionTrue"/>
+                    <Cascade pathway="GNFSpread" action="Execute" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronAGFCheckSignal" duration="500" initial="true">
+                <Condition>
+                    <Predicate rule="L4NeuronAGF _gt 0.1" args="L4NeuronAGF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L4NeuronCAFCheckSignal" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L4NeuronAGFCheckSignal" condition="OnConditionFalse"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronCAFCheckSignal" duration="100" initial="false">
+                <Condition>
+                    <Predicate rule="L4NeuronCAF _~gt 1" args="L4NeuronCAF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronAxonGrowOn" condition="OnConditionFalse"/>
+                    <Cascade action="Execute" pathway="L2NeuronAxonGrowOff" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L2NeuronAxonalTerminalForm" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+            
+            <!--STAGE3: TerminalFormedFactor presence is checked by dendritic tree-->
+            <!--L2->L4-->
+            <SignalingPathway id="L2NeuronTCFCheckSignal" duration="20" initial="true">
+                <Condition>
+                    <Predicate rule="L2NeuronTCF _~gt 1" args="L2NeuronTCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronTCFCheckSignal" condition="Default"/>
+                    <Cascade action="Execute" pathway="L4NeuronDendriticSpineForm" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L4NeuronDSCFCheckSignal" duration="20" initial="true">
+                <Condition>
+                    <Predicate rule="L4NeuronDSCF _~gt 1" args="L4NeuronDSCF"/>
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L4NeuronDSCFCheckSignal" condition="OnConditionFalse"/>
+                    <Cascade action="Execute" pathway="L2NeuronSynapseForm" condition="OnConditionTrue"/>
+                </Cascades>
+            </SignalingPathway>
+
+        </Mechanism>
+
+        <!--STAGE3: compartment formation: dendritic tree, dendritic spine, axon, axon terminal-->
+        <Mechanism type="CompartmentForm">
+            <!--L2 Neuron: normal-->
+            <SignalingPathway id="L2NeuronAxonForm" duration="50" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L2NeuronAxon"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="L2NeuronAxonalTerminalForm" duration="20" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L2NeuronAxonalTerminal"/>
+            </SignalingPathway>
+
+            <!--L4 Neuron: no axon-->
+            <SignalingPathway id="L4NeuronDendriteTreeForm" duration="50" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L4NeuronDendriteTree"/>
+            </SignalingPathway>
+
+            <SignalingPathway id="L4NeuronDendriticSpineForm" duration="20" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L4NeuronDendriticSpine"/>
+            </SignalingPathway>
+        </Mechanism>
+
+        <!--STAGE3: final synapse formation-->
+        <Mechanism type="SynapseForm">
+
+            <SignalingPathway id="L2NeuronSynapseForm" duration="500" initial="false">
+                <ExecuteParameter type="ObjectCreateParameters" creationType="L2NeuronSynapse"/>
+            </SignalingPathway>
+
+        </Mechanism>
+        
+
+        <!--STAGE3: Axon growth in accordance with the scheme: (L1->L3, L3->L2, L2->L4)-->
+        <Mechanism type="AxonGrow">
+
+            <!--L2->L4-->
+            <SignalingPathway id="L2NeuronAxonGrowOn" duration="100" initial="false">
+                <Condition>
+                    <Predicate rule="L4NeuronAGF _gt 0.05" args="L4NeuronAGF"/>
+                    <ConditionParameter selectionLigand="L4NeuronAGF" selectionType="Gradient" />
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L4NeuronCAFCheckSignal" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L4NeuronAGFCheckSignal" condition="OnConditionFalse"/>
+                </Cascades>
+            </SignalingPathway>
+
+            <!--L2->L4-->
+            <SignalingPathway id="L2NeuronAxonGrowOff" duration="100" initial="false">
+                <Condition>
+                    <Predicate rule="L4NeuronAGF _gt 0.29" args="L4NeuronAGF"/>
+                    <ConditionParameter selectionLigand="L4NeuronAGF" selectionType="Antigradient" />
+                </Condition>
+                <Cascades>
+                    <Cascade action="Execute" pathway="L2NeuronAxonGrowOff" condition="OnConditionTrue"/>
+                    <Cascade action="Execute" pathway="L4NeuronAGFCheckSignal" condition="OnConditionFalse"/>
+                </Cascades>
+            </SignalingPathway>
+
+        </Mechanism>
+
+    </Mechanisms>
+
+    <ReceptorsDescription>
+    </ReceptorsDescription>
+
+    <Ligands>
+        <!--Neuron Factor is emitted by neurons at the start of their existence: it is a signal for glias that neurons are present-->
+        <Ligand id="NF" radius="100"/>
+        <!--Glial neurotrophic factor is emitted by glias in response to Neuron Factor presence and it is responsible for axon growth processes initiation-->
+        <Ligand id="GNF" radius="100"/>
+        <!--Axon growth factors, emitted by dendritic tree. In the "Axons" configuration this function if performed by AGF-->
+        <Ligand id="L2NeuronAGF" radius="10"/>
+<!--        <Ligand id="L3NeuronAGF" radius="28"/>-->
+        <Ligand id="L4NeuronAGF" radius="10"/>
+        <!--Axon Connection Factor is secreted by dendritic tree and informs axon that it's possible to form a terminal in a given coordinate-->
+<!--        <Ligand id="L2NeuronCAF" radius="1"/>-->
+<!--        <Ligand id="L3NeuronCAF" radius="1"/>-->
+        <Ligand id="L4NeuronCAF" radius="1"/>
+        <!--Terminal Formed Factor is emitted by the axon terminal and signals to the dendritic tree that it's time to form a dendritic spine-->
+<!--        <Ligand id="L1NeuronTCF" radius="1"/>-->
+        <Ligand id="L2NeuronTCF" radius="1"/>
+<!--        <Ligand id="L3NeuronTCF" radius="1"/>-->
+        <!--Dendritic Spine Formed Factor is emitted by the dendritic spine and signals to the axon terminal about its full readiness to form a synapse-->
+<!--        <Ligand id="L2NeuronDSCF" radius="1"/>-->
+<!--        <Ligand id="L3NeuronDSCF" radius="1"/>-->
+        <Ligand id="L4NeuronDSCF" radius="1"/>
+    </Ligands>
+
+    <ModelCells>
+        <!--L2 Neuron with both dendrite and axon-->
+        <ModelCell baseType="NeuronCell" id="L2Neuron" immovable="true">
+            <SPs>
+                <SP type="NFSpread"/>
+                <SP type="GNFSpread"/>
+                <SP type="NFCheckSignals"/>
+                <SP type="L2NeuronGNFCheckSignals"/>
+                <SP type="L2NeuronAxonForm"/>
+<!--                <SP type="L2NeuronDendriteTreeForm"/>-->
+            </SPs>
+            <Compartments>
+                <Compartment baseType="Axon" id="L2NeuronAxon" unique="true">
+                    <SPs>
+                        <SP type="L4NeuronAGFCheckSignal"/>
+                        <SP type="L2NeuronAxonGrowOn"/>
+                        <SP type="L2NeuronAxonGrowOff"/>
+                        <SP type="L2NeuronAxonalTerminalForm"/>
+                        <SP type="L4NeuronCAFCheckSignal"/>
+                    </SPs>
+                </Compartment>
+                <!--L2->l4-->
+                <Compartment baseType="AxonalTerminal" id="L2NeuronAxonalTerminal" unique="false">
+                    <SPs>
+                        <SP type="L2NeuronTCFSpread"/>
+                        <SP type="L2NeuronTCFGather"/>
+                        <SP type="L4NeuronDSCFCheckSignal"/>
+                        <SP type="L2NeuronSynapseForm"/>
+                    </SPs>
+                </Compartment>
+                <Compartment baseType="Synapse" id="L2NeuronSynapse" unique="false"/>
+
+            </Compartments>
+        </ModelCell>
+
+        <!--L4 Neuron with a dendrite and no axon-->
+        <ModelCell baseType="NeuronCell" id="L4Neuron" immovable="true">
+            <SPs>
+                <SP type="NFSpread"/>
+                <SP type="GNFSpread"/>
+                <SP type="NFCheckSignals"/>
+                <SP type="L4NeuronGNFCheckSignals"/>
+                <SP type="L4NeuronDendriteTreeForm"/>
+            </SPs>
+            <Compartments>
+                <!--l2->L4-->
+                <Compartment baseType="DendriteTree" id="L4NeuronDendriteTree" unique="true">
+                    <SPs>
+                        <SP type="L4NeuronAGFSpread"/>
+                        <SP type="L4NeuronCAFSpread"/>
+                        <SP type="L2NeuronTCFCheckSignal"/>
+                        <SP type="L4NeuronDendriticSpineForm"/>
+                    </SPs>
+                </Compartment>
+                <Compartment baseType="DendriticSpine" id="L4NeuronDendriticSpine" unique="false">
+                    <SPs>
+                        <SP type="L4NeuronDSCFSpread"/>
+                        <SP type="L4NeuronDSCFGather"/>
+                    </SPs>
+                </Compartment>
+
+            </Compartments>
+        </ModelCell>
+    </ModelCells>
+
+    <SignalPoints></SignalPoints>
+</BCNNM>

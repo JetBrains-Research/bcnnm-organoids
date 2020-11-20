@@ -5,8 +5,8 @@ apply plugin: 'application'
 idea {
     module { excludeDirs = [file(".idea")] }
     project {
-        jdkName = '11'
-        languageLevel = '11'
+        jdkName = '1.8'
+        languageLevel = '1.8'
         vcs = 'Git'
     }
 }
@@ -94,6 +94,26 @@ project(':Modules:SimulationModel') {
                 '-processor', 'SingleIndividualProcessor',
                 '-configPath', 'Experiments/Configuration-II/B',
                 '-statisticExporters', 'CellMovementExporter',
+                '-indSeedNum', '1'
+    }
+
+    task Example_AxonGuidance(type: Exec, dependsOn: jar) {
+        workingDir "$rootProject.projectDir"
+        commandLine 'java', '-Xms1g', '-Xmx10g',
+                '-jar', './Artifacts/SimulationModel.jar',
+                '-processor', 'SingleIndividualProcessor',
+                '-configPath', 'Examples/AxonGuidance',
+                '-statisticExporters', 'CellMovementExporter;ConcentrationsExporter',
+                '-indSeedNum', '1'
+    }
+
+    task Example_SignalSpreading(type: Exec, dependsOn: jar) {
+        workingDir "$rootProject.projectDir"
+        commandLine 'java', '-Xms1g', '-Xmx10g',
+                '-jar', './Artifacts/SimulationModel.jar',
+                '-processor', 'SingleIndividualProcessor',
+                '-configPath', 'Examples/SignalSpreading',
+                '-statisticExporters', 'CellMovementExporter;ConcentrationsExporter',
                 '-indSeedNum', '1'
     }
 }

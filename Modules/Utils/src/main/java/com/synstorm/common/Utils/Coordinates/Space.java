@@ -1,5 +1,6 @@
 package com.synstorm.common.Utils.Coordinates;
 
+import com.synstorm.common.Utils.SimulationEvents.IndividualEvents.ConcentrationChangeEvent;
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -455,11 +456,15 @@ public class Space {
         return size * (x * size + y) + z;
     }
 
-    public void recalculateSignals() {
+    public List<ConcentrationChangeEvent> recalculateSignals() {
+        List<ConcentrationChangeEvent> events = new ArrayList<>();
+
         if (changedObjSignalIds.size() > 0) {
-            changedObjSignalIds.forEach(ids -> recalculateSignal(idToObject.get(ids[0]), ids[1]));
+            changedObjSignalIds.forEach(ids -> recalculateSignal(idToObject.get(ids[0]), ids[1], events));
             changedObjSignalIds.clear();
         }
+
+        return events;
     }
 
     public int calcVectors() {
@@ -518,14 +523,26 @@ public class Space {
         return vectors.size();
     }
 
-    private void recalculateSignal(@NotNull SignalBeamer b, int signal) {
+    private void recalculateSignal(@NotNull SignalBeamer b, int signal, List<ConcentrationChangeEvent> events) {
         final int cycles = b.memRadius[signal] - b.currRadius[signal];
-        if (cycles > 0)
-//            for (int i = 0; i < cycles; ++i)
-                spreadSignal(b, signal);
+        int prevRadius = b.currRadius[signal];
+        if (cycles > 0) {
+            double changeVal = spreadSignal(b, signal);
+
+            ConcentrationChangeEvent currentEvent = new ConcentrationChangeEvent(-1, "Spread", signal,
+                    new int[]{b.x, b.y, b.z},
+                    prevRadius, changeVal);
+            events.add(currentEvent);
+        }
         else if (cycles < 0)
-//            for (int i = cycles; i <= 0; ++i)
-                gatherSignal(b, signal);
+        {
+            double changeVal = gatherSignal(b, signal);
+
+            ConcentrationChangeEvent currentEvent = new ConcentrationChangeEvent(-1, "Gather", signal,
+                    new int[]{b.x, b.y, b.z},
+                    prevRadius, changeVal);
+            events.add(currentEvent);
+        }
     }
 
     public int[] getBorderlines() {
@@ -572,7 +589,7 @@ public class Space {
         return distances;
     }
 
-    private void spreadSignal(@NotNull SignalBeamer b, int type) {
+    private double spreadSignal(@NotNull SignalBeamer b, int type) {
         final int r = b.currRadius[type];
         final double signalPower = 1.;
         final double val = signalPower * sValueCoefficients[type][r];
@@ -582,9 +599,11 @@ public class Space {
             iterateCube(b, type, val);
 
         ++b.currRadius[type];
+
+        return val;
     }
 
-    private void gatherSignal(@NotNull SignalBeamer b, int type) {
+    private double gatherSignal(@NotNull SignalBeamer b, int type) {
         --b.currRadius[type];
 
         final int r = b.currRadius[type];
@@ -594,6 +613,8 @@ public class Space {
             cube[size * (b.x * size + b.y) + b.z].concentrations[type] += val;
         else
             iterateCube(b, type, val);
+
+        return val;
     }
 
     @Contract(pure = true)
