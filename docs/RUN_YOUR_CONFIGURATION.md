@@ -2,7 +2,7 @@
 
 In order to run the configuration you wrote follow these steps:
 
-1. Download the archive from the link provided.
+1. Download the archive from the link [https://github.com/JetBrains-Research/bcnnm-organoids/raw/master/public/fncom.2020.588224.zip](https://github.com/JetBrains-Research/bcnnm-organoids/raw/master/public/fncom.2020.588224.zip).
 2. Extract it.
 3. Go to the directory `model/`.
 4. Make sure that the file `SimulationModel-all.jar` and the directory `data` are present.
